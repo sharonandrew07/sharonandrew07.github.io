@@ -8,28 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 
 <style>
-/* Intro text */
-#intro {
-    font-size: 0.95rem;
-    color: #ccc;
-    margin-top: 5px;
-    min-height: 20px;
-}
-
-/* Status */
-.status {
-    font-size: 0.8rem;
-    color: #00ff9d;
-    margin-bottom: 20px;
-    animation: pulse 2s infinite;
-}
-
-/* Pulse */
-@keyframes pulse {
-    0% { opacity: 0.4; }
-    50% { opacity: 1; }
-    100% { opacity: 0.4; }
-}
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
@@ -90,11 +68,8 @@ canvas {
     50% { transform: translateY(-10px); }
 }
 
-/* Typewriter */
-h1 
-<p id="intro"></p>
-<p class="status">● online</p>
-{
+/* Name typing */
+h1 {
     margin-top: 15px;
     font-size: 2rem;
     border-right: 2px solid white;
@@ -105,8 +80,30 @@ h1
     overflow: hidden;
 }
 
+/* Intro */
+#intro {
+    font-size: 0.95rem;
+    color: #ccc;
+    margin-top: 5px;
+    min-height: 20px;
+}
+
+/* Status */
+.status {
+    font-size: 0.8rem;
+    color: #00ff9d;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+}
+
 /* Bio */
-p {
+.bio {
     color: #bbb;
     margin-bottom: 25px;
 }
@@ -161,10 +158,12 @@ a:hover {
     </div>
 
     <h1 id="name"></h1>
-    <p>calm outside. storm inside.</p>
+    <p id="intro"></p>
+    <p class="status">● online</p>
+
+    <p class="bio">calm outside. storm inside.</p>
 
     <a href="https://instagram.com/guruprasath2244">📸 Instagram</a>
-
     <a href="https://wa.me/919344564778?text=Hey%20I%20just%20saw%20your%20site%20🔥">
         💬 WhatsApp
     </a>
@@ -172,7 +171,7 @@ a:hover {
 </div>
 
 <audio id="music" loop>
-    <source src="Solo X Crack(MP3_320K).mp3" type="audio/mpeg">
+    <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -187,9 +186,9 @@ function typeIntro() {
         setTimeout(typeIntro, 40);
     }
 }
-
 setTimeout(typeIntro, 1200);
-/* 🌌 Particles */
+
+/* Particles */
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 
@@ -222,10 +221,9 @@ function animate() {
 
     requestAnimationFrame(animate);
 }
-
 animate();
 
-/* 💥 Ripple + music start */
+/* Ripple + music */
 document.addEventListener("click", function(e) {
     const ripple = document.createElement("div");
     ripple.className = "ripple";
@@ -238,7 +236,7 @@ document.addEventListener("click", function(e) {
     document.getElementById("music").play().catch(()=>{});
 });
 
-/* ⌨️ Typewriter */
+/* Name typing */
 const text = "Guruprasath";
 let i = 0;
 
@@ -249,10 +247,9 @@ function type() {
         setTimeout(type, 100);
     }
 }
-
 type();
 
-/* 🔐 Secret trigger */
+/* Secret trigger */
 let taps = 0;
 document.getElementById("secretTrigger").addEventListener("click", () => {
     taps++;
