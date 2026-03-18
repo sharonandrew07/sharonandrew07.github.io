@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guruprasath</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 
 <style>
 body {
@@ -15,7 +15,7 @@ body {
     color: white;
 }
 
-/* 🌌 Background animation */
+/* 🌌 Canvas background */
 canvas {
     position: fixed;
     top: 0;
@@ -26,15 +26,15 @@ canvas {
 /* Container */
 .container {
     text-align: center;
+    margin-top: 60px;
     animation: fadeIn 1.5s ease;
-    margin-top: 50px;
 }
 
 /* Profile */
 .profile {
     position: relative;
-    width: 140px;
-    height: 140px;
+    width: 150px;
+    height: 150px;
     margin: auto;
     border-radius: 50%;
     animation: float 3s ease-in-out infinite;
@@ -43,15 +43,15 @@ canvas {
 .profile::before {
     content: "";
     position: absolute;
-    top: -4px;
-    left: -4px;
-    width: 148px;
-    height: 148px;
+    top: -5px;
+    left: -5px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     background: linear-gradient(45deg, #00f5ff, #ff00c8, #00f5ff);
     z-index: -1;
-    filter: blur(10px);
-    animation: spin 6s linear infinite;
+    filter: blur(12px);
+    animation: spin 8s linear infinite;
 }
 
 .profile img {
@@ -69,7 +69,7 @@ canvas {
 
 @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+    50% { transform: translateY(-10px); }
 }
 
 @keyframes fadeIn {
@@ -79,35 +79,39 @@ canvas {
 
 /* Text */
 h1 {
-    font-size: 2.4rem;
+    font-size: 2.2rem;
     margin: 15px 0 5px;
 }
 
 p {
-    color: #aaa;
+    color: #bbb;
     margin-bottom: 25px;
 }
 
 /* Buttons */
 a {
     display: block;
-    width: 250px;
+    width: 260px;
     margin: 12px auto;
     padding: 14px;
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(10px);
-    color: white;
+    border-radius: 14px;
     text-decoration: none;
-    border-radius: 12px;
+    color: white;
+
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255,255,255,0.1);
     transition: 0.3s;
 }
 
 a:hover {
     transform: scale(1.08);
-    background: rgba(255,255,255,0.2);
+    background: linear-gradient(45deg, #00f5ff, #ff00c8);
+    box-shadow: 0 0 25px rgba(255,0,200,0.6);
 }
 
-/* 💥 Tap ripple */
+/* Ripple effect */
 .ripple {
     position: fixed;
     border-radius: 50%;
@@ -132,7 +136,7 @@ a:hover {
 
 <div class="container">
 
-    <div class="profile">
+    <div class="profile" id="secretTrigger">
         <img src="PXL_20251129_172125766.jpg">
     </div>
 
@@ -147,8 +151,13 @@ a:hover {
 
 </div>
 
+<!-- 🎵 Background music -->
+<audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-/* 🌌 Particle background */
+/* 🌌 Particles */
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 
@@ -157,12 +166,12 @@ canvas.height = window.innerHeight;
 
 let particles = [];
 
-for (let i = 0; i < 80; i++) {
+for (let i = 0; i < 100; i++) {
     particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         size: Math.random() * 2,
-        speed: Math.random() * 0.5
+        speed: Math.random() * 0.7
     });
 }
 
@@ -184,19 +193,27 @@ function animate() {
 
 animate();
 
-/* 💥 Tap ripple effect */
+/* 💥 Ripple */
 document.addEventListener("click", function(e) {
     const ripple = document.createElement("div");
     ripple.className = "ripple";
     ripple.style.left = e.clientX + "px";
     ripple.style.top = e.clientY + "px";
     ripple.style.width = ripple.style.height = "20px";
-
     document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
 
-    setTimeout(() => {
-        ripple.remove();
-    }, 600);
+    // 🎵 Start music on first interaction
+    document.getElementById("bgMusic").play().catch(()=>{});
+});
+
+/* 🔐 Secret page trigger */
+let tapCount = 0;
+document.getElementById("secretTrigger").addEventListener("click", () => {
+    tapCount++;
+    if (tapCount === 5) {
+        window.location.href = "secret.html";
+    }
 });
 </script>
 
