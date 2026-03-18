@@ -8,52 +8,139 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 
 <style>
+/* ===== BODY & BACKGROUND ===== */
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    overflow: hidden;
+    overflow-x: hidden;
     color: white;
     background: radial-gradient(circle at top, #1a1a2e, #000);
 }
 canvas { position: fixed; top:0; left:0; z-index:-1; }
 
-.container { text-align:center; margin-top:60px; }
+/* ===== CONTAINER ===== */
+.container {
+    text-align: center;
+    margin: 8vh auto 0 auto;
+    width: 90%;
+    max-width: 600px;
+}
 
-/* Profile */
+/* ===== PROFILE ===== */
 .profile {
-    width:150px; height:150px; margin:auto; border-radius:50%; overflow:hidden; position:relative;
-    animation: float 3s ease-in-out infinite; cursor:pointer;
+    width: 30vw;
+    max-width: 180px;
+    aspect-ratio: 1/1;
+    margin: auto;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    animation: float 3s ease-in-out infinite;
+    cursor: pointer;
 }
 .profile::before {
-    content:""; position:absolute; inset:-5px; border-radius:50%;
-    background:linear-gradient(45deg,#00f5ff,#ff00c8,#00f5ff); filter:blur(12px); z-index:-1; animation:spin 6s linear infinite;
+    content:"";
+    position:absolute;
+    inset:-5px;
+    border-radius:50%;
+    background:linear-gradient(45deg,#00f5ff,#ff00c8,#00f5ff);
+    filter:blur(12px);
+    z-index:-1;
+    animation:spin 6s linear infinite;
 }
-.profile img { width:100%; height:100%; object-fit:cover; }
+.profile img { width: 100%; height: 100%; object-fit: cover; }
 
 @keyframes spin { 100% { transform: rotate(360deg); } }
 @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
 
-h1 { margin-top:15px; font-size:2rem; border-right:2px solid white; width:fit-content; margin-left:auto;margin-right:auto; white-space:nowrap; overflow:hidden; }
-
-#intro { font-size:0.95rem; color:#ccc; margin-top:5px; min-height:20px; }
-.status { font-size:0.8rem; color:#00ff9d; margin-bottom:15px; animation:pulse 2s infinite; }
+/* ===== TEXT ===== */
+h1 {
+    margin-top: 15px;
+    font-size: 5vw;
+    max-font-size: 2rem;
+    border-right: 2px solid white;
+    width: fit-content;
+    margin-left:auto;
+    margin-right:auto;
+    white-space: nowrap;
+    overflow: hidden;
+}
+#intro { font-size: 3.5vw; max-font-size: 0.95rem; color: #ccc; margin-top:5px; min-height:20px; }
+.status { font-size: 3vw; max-font-size:0.8rem; color: #00ff9d; margin-bottom: 15px; animation: pulse 2s infinite; }
 @keyframes pulse {0%{opacity:0.4;}50%{opacity:1;}100%{opacity:0.4;}}
 
-.bio { color:#bbb; margin-bottom:20px; }
-.things span { display:inline-block; padding:6px 12px; margin:5px; border-radius:20px; font-size:0.8rem; background: rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1);}
+.bio { color:#bbb; margin-bottom:20px; font-size:3.5vw; max-font-size:0.9rem; }
+
+.things span { display:inline-block; padding:6px 12px; margin:5px; border-radius:20px; font-size:3vw; max-font-size:0.8rem; background: rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1);}
 .things span:hover { background:linear-gradient(45deg,#00f5ff,#ff00c8); transform:scale(1.05); }
 
-#nowPlaying { font-size:0.8rem; color:#888; margin-top:5px; }
-#timeMsg { font-size:0.9rem; color:#ccc; }
-#hiddenMsg { opacity:0; transition:1s; color:#ff77c8; }
+/* ===== NOW PLAYING & MESSAGES ===== */
+#nowPlaying { font-size:3vw; max-font-size:0.8rem; margin-top:5px; }
+#timeMsg { font-size:3.5vw; max-font-size:0.9rem; color:#ccc; }
+#hiddenMsg { opacity:0; transition:1s; color:#ff77c8; font-size:3vw; max-font-size:0.9rem; }
 #hiddenMsg.show { opacity:1; }
 
-a { display:block; width:240px; margin:12px auto; padding:14px; border-radius:12px; text-decoration:none; color:white; background: rgba(255,255,255,0.08);}
+/* ===== MUSIC CONTROLS ===== */
+.music-controls {
+    margin-top: 10px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+}
+.music-controls button {
+    background: rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.1);
+    color:white;
+    padding:10px 14px;
+    border-radius:10px;
+    font-size:1rem;
+    cursor:pointer;
+    transition:0.3s;
+}
+.music-controls button:hover {
+    background:linear-gradient(45deg,#00f5ff,#ff00c8);
+    box-shadow:0 0 15px rgba(255,0,200,0.6);
+}
+.music-controls input[type="range"] {
+    width:120px;
+    margin:0 5px;
+}
+
+/* ===== PROGRESS BAR ===== */
+#progressContainer {
+    width:80%;
+    max-width:300px;
+    height:5px;
+    background: rgba(255,255,255,0.2);
+    border-radius:5px;
+    margin:10px auto 0 auto;
+    cursor:pointer;
+}
+#progress {
+    width:0%;
+    height:100%;
+    background: linear-gradient(45deg,#00f5ff,#ff00c8);
+    border-radius:5px;
+}
+
+/* ===== BUTTONS ===== */
+a { display:block; width:80%; max-width:240px; margin:12px auto; padding:14px; border-radius:12px; text-decoration:none; color:white; background: rgba(255,255,255,0.08);}
 a:hover { transform:scale(1.07); background:linear-gradient(45deg,#00f5ff,#ff00c8); box-shadow:0 0 20px rgba(255,0,200,0.6); }
 
+/* ===== RIPPLE ===== */
 .ripple { position:fixed; border-radius:50%; background:rgba(255,255,255,0.3); transform:scale(0); animation:ripple 0.6s linear;}
 @keyframes ripple { to{ transform: scale(10); opacity:0; } }
 
+/* ===== RESPONSIVE ===== */
+@media (max-width:600px){
+    h1{font-size:6vw;}
+    #intro{font-size:4vw;}
+    .bio{font-size:4vw;}
+    .things span{font-size:3.5vw;}
+    #nowPlaying, .status, #timeMsg, #hiddenMsg{font-size:3.5vw;}
+}
 </style>
 </head>
 
@@ -81,6 +168,19 @@ a:hover { transform:scale(1.07); background:linear-gradient(45deg,#00f5ff,#ff00c
 </div>
 
 <p id="nowPlaying"></p>
+
+<!-- Music controls -->
+<div class="music-controls">
+    <button id="prevBtn">⏮️</button>
+    <button id="playPauseBtn">▶️</button>
+    <button id="nextBtn">⏭️</button>
+    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5" title="Volume">
+</div>
+
+<div id="progressContainer">
+    <div id="progress"></div>
+</div>
+
 <p id="timeMsg"></p>
 <p id="hiddenMsg">Not everyone notices… but you did.</p>
 
@@ -92,14 +192,14 @@ a:hover { transform:scale(1.07); background:linear-gradient(45deg,#00f5ff,#ff00c
 <audio id="music"></audio>
 
 <script>
-/* NAME & INTRO TYPING */
+/* ===== NAME & INTRO TYPING ===== */
 let name="Guruprasath",i=0;
 function type(){if(i<name.length){document.getElementById("name").innerHTML+=name[i++];setTimeout(type,100);}} type();
 let intro="Not always loud. But always real.", j=0;
 function introType(){if(j<intro.length){document.getElementById("intro").innerHTML+=intro[j++]; setTimeout(introType,40);}}
 setTimeout(introType,1200);
 
-/* TIME MESSAGE & HIDDEN MESSAGE */
+/* TIME & HIDDEN MESSAGES */
 const hour=new Date().getHours();
 document.getElementById("timeMsg").innerText=
     hour<12?"Starting slow…":hour<18?"In the middle of something.":hour<22?"Evenings feel different.":"Late nights. Real thoughts.";
@@ -115,13 +215,28 @@ canvas.width=innerWidth; canvas.height=innerHeight;
 let p=[]; for(let k=0;k<80;k++){p.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2});}
 function anim(){ctx.clearRect(0,0,canvas.width,canvas.height); p.forEach(e=>{e.y+=0.5;if(e.y>canvas.height)e.y=0;ctx.fillStyle="white";ctx.beginPath();ctx.arc(e.x,e.y,e.s,0,Math.PI*2);ctx.fill();}); requestAnimationFrame(anim);} anim();
 
-/* RIPPLE */
-document.addEventListener("click",e=>{const r=document.createElement("div");r.className="ripple";r.style.left=e.clientX+"px";r.style.top=e.clientY+"px";r.style.width=r.style.height="20px";document.body.appendChild(r); setTimeout(()=>r.remove(),600);});
+/* RIPPLE & MUSIC START ONLY ONCE */
+const audio=document.getElementById("music");
+let isPlaying=false;
+document.addEventListener("click", e=>{
+    const r=document.createElement("div");
+    r.className="ripple";
+    r.style.left=e.clientX+"px";
+    r.style.top=e.clientY+"px";
+    r.style.width=r.style.height="20px";
+    document.body.appendChild(r);
+    setTimeout(()=>r.remove(),600);
+
+    if(!isPlaying){audio.play().catch(()=>{}); isPlaying=true; playPauseBtn.innerText="⏸️";}
+});
 
 /* SECRET TAP */
-let taps=0; document.getElementById("secretTrigger").onclick=()=>{taps++; if(taps==5) location.href="secret.html";};
+let taps=0; document.getElementById("secretTrigger").onclick=()=>{
+    taps++; 
+    if(taps==5) location.href="secret.html";
+};
 
-/* AUDIO WITH FULL SONG PLAY */
+/* SONG LIST */
 const songs = [
   {name:"Apocalypse", file:"Apocalypse(MP3_320K).mp3"},
     {name:"Starlight", file:"Starlight(MP3_320K).mp3"},
@@ -135,26 +250,58 @@ const songs = [
     {name:"Intro", file:"Intro(MP3_320K).mp3"}
 ];
 
-const audio=document.getElementById("music");
 const nowPlaying=document.getElementById("nowPlaying");
 let current=Math.floor(Math.random()*songs.length);
 
+/* ===== MUSIC FUNCTIONS ===== */
 function playSong(index){
     const song=songs[index];
     audio.src=song.file;
     nowPlaying.innerText="🎧 "+song.name;
-    audio.volume=0.5;
+    audio.volume=volumeSlider.value;
     audio.play().catch(()=>{});
+    isPlaying=true;
+    playPauseBtn.innerText="⏸️";
 }
 
-// Auto play next when current ends
-audio.addEventListener("ended", ()=>{
-    current = (current+1)%songs.length;
-    playSong(current);
+/* PLAY/PAUSE, NEXT, PREV */
+const playPauseBtn=document.getElementById("playPauseBtn");
+const nextBtn=document.getElementById("nextBtn");
+const prevBtn=document.getElementById("prevBtn");
+const volumeSlider=document.getElementById("volumeSlider");
+const progress=document.getElementById("progress");
+const progressContainer=document.getElementById("progressContainer");
+
+playPauseBtn.addEventListener("click", ()=>{
+    if(isPlaying){audio.pause(); isPlaying=false; playPauseBtn.innerText="▶️";}
+    else{audio.play(); isPlaying=true; playPauseBtn.innerText="⏸️";}
+});
+nextBtn.addEventListener("click", ()=>{current=(current+1)%songs.length; playSong(current);});
+prevBtn.addEventListener("click", ()=>{current=(current-1+songs.length)%songs.length; playSong(current);});
+
+/* VOLUME */
+volumeSlider.addEventListener("input", ()=>{audio.volume=volumeSlider.value;});
+
+/* PROGRESS BAR UPDATE */
+audio.addEventListener("timeupdate", ()=>{
+    const percent=(audio.currentTime/audio.duration)*100;
+    progress.style.width=percent+"%";
 });
 
-// Start first song on user click (browser policy)
-document.addEventListener("click", ()=>{playSong(current);});
+/* SEEK ON PROGRESS CLICK */
+progressContainer.addEventListener("click", e=>{
+    const rect=progressContainer.getBoundingClientRect();
+    const clickX=e.clientX-rect.left;
+    const width=rect.width;
+    const newTime=(clickX/width)*audio.duration;
+    audio.currentTime=newTime;
+});
+
+/* AUTO NEXT WHEN SONG ENDS */
+audio.addEventListener("ended", ()=>{current=(current+1)%songs.length; playSong(current);});
+
+/* START FIRST SONG */
+playSong(current);
 </script>
 
 </body>
