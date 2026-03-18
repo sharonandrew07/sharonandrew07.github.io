@@ -8,6 +8,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 
 <style>
+/* Intro text */
+#intro {
+    font-size: 0.95rem;
+    color: #ccc;
+    margin-top: 5px;
+    min-height: 20px;
+}
+
+/* Status */
+.status {
+    font-size: 0.8rem;
+    color: #00ff9d;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+}
+
+/* Pulse */
+@keyframes pulse {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+}
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
@@ -69,7 +91,10 @@ canvas {
 }
 
 /* Typewriter */
-h1 {
+h1 
+<p id="intro"></p>
+<p class="status">● online</p>
+{
     margin-top: 15px;
     font-size: 2rem;
     border-right: 2px solid white;
@@ -151,6 +176,19 @@ a:hover {
 </audio>
 
 <script>
+/* Intro typing */
+const introText = "Not always loud. But always real.";
+let j = 0;
+
+function typeIntro() {
+    if (j < introText.length) {
+        document.getElementById("intro").innerHTML += introText.charAt(j);
+        j++;
+        setTimeout(typeIntro, 40);
+    }
+}
+
+setTimeout(typeIntro, 1200);
 /* 🌌 Particles */
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
