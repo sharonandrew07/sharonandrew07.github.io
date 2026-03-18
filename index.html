@@ -43,7 +43,7 @@ h1 { margin-top:15px; font-size:2rem; border-right:2px solid white; width:fit-co
 .things span { display:inline-block; padding:6px 12px; margin:5px; border-radius:20px; font-size:0.8rem; background: rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1);}
 .things span:hover { background:linear-gradient(45deg,#00f5ff,#ff00c8); transform:scale(1.05); }
 
-#nowPlaying { font-size:0.8rem; color:#888; }
+#nowPlaying { font-size:0.8rem; color:#888; margin-top:5px; }
 #timeMsg { font-size:0.9rem; color:#ccc; }
 #hiddenMsg { opacity:0; transition:1s; color:#ff77c8; }
 #hiddenMsg.show { opacity:1; }
@@ -89,7 +89,7 @@ a:hover { transform:scale(1.07); background:linear-gradient(45deg,#00f5ff,#ff00c
 
 </div>
 
-<audio id="music" loop></audio>
+<audio id="music"></audio>
 
 <script>
 /* NAME & INTRO TYPING */
@@ -112,18 +112,18 @@ setInterval(()=>{document.querySelector(".bio").innerText=moods[Math.floor(Math.
 /* PARTICLES */
 const canvas=document.getElementById("bg"),ctx=canvas.getContext("2d");
 canvas.width=innerWidth; canvas.height=innerHeight;
-let p=[]; for(let i=0;i<80;i++){p.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2});}
+let p=[]; for(let k=0;k<80;k++){p.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2});}
 function anim(){ctx.clearRect(0,0,canvas.width,canvas.height); p.forEach(e=>{e.y+=0.5;if(e.y>canvas.height)e.y=0;ctx.fillStyle="white";ctx.beginPath();ctx.arc(e.x,e.y,e.s,0,Math.PI*2);ctx.fill();}); requestAnimationFrame(anim);} anim();
 
 /* RIPPLE */
 document.addEventListener("click",e=>{const r=document.createElement("div");r.className="ripple";r.style.left=e.clientX+"px";r.style.top=e.clientY+"px";r.style.width=r.style.height="20px";document.body.appendChild(r); setTimeout(()=>r.remove(),600);});
 
-/* SECRET */
+/* SECRET TAP */
 let taps=0; document.getElementById("secretTrigger").onclick=()=>{taps++; if(taps==5) location.href="secret.html";};
 
-/* 🔥 NEXT-LEVEL AUDIO WITH 10 SONGS - PLAY FULL SONGS */
+/* AUDIO WITH FULL SONG PLAY */
 const songs = [
-  name:"Apocalypse", file:"Apocalypse(MP3_320K).mp3"},
+  {name:"Apocalypse", file:"Apocalypse(MP3_320K).mp3"},
     {name:"Starlight", file:"Starlight(MP3_320K).mp3"},
     {name:"Night Changes", file:"Night Changes(MP3_320K).mp3"},
     {name:"Until I Found You", file:"Until I Found You (Em Beihold Version)(MP3_320K).mp3"},
@@ -135,36 +135,26 @@ const songs = [
     {name:"Intro", file:"Intro(MP3_320K).mp3"}
 ];
 
-const audio = document.getElementById("music");
-const nowPlaying = document.getElementById("nowPlaying");
-
-let current = Math.floor(Math.random() * songs.length);
+const audio=document.getElementById("music");
+const nowPlaying=document.getElementById("nowPlaying");
+let current=Math.floor(Math.random()*songs.length);
 
 function playSong(index){
-    const song = songs[index];
-    audio.src = song.file;
-    nowPlaying.innerText = "🎧 " + song.name;
-    audio.volume = 0;
+    const song=songs[index];
+    audio.src=song.file;
+    nowPlaying.innerText="🎧 "+song.name;
+    audio.volume=0.5;
     audio.play().catch(()=>{});
-    fadeIn(audio,0.02);
 }
 
-/* Fade In/Out */
-function fadeIn(a, step){ let vol=a.volume; const f=setInterval(()=>{vol+=step;if(vol>=1){vol=1;clearInterval(f);} a.volume=vol;},50);}
-function fadeOut(a, step, cb){ let vol=a.volume; const f=setInterval(()=>{vol-=step;if(vol<=0){vol=0;clearInterval(f); if(cb)cb();} a.volume=vol;},50);}
-
-playSong(current);
-
-/* NEXT SONG AFTER FULL PLAY */
+// Auto play next when current ends
 audio.addEventListener("ended", ()=>{
-    current = (current+1) % songs.length;
+    current = (current+1)%songs.length;
     playSong(current);
 });
 
-/* START MUSIC ON FIRST CLICK */
-document.addEventListener("click",()=>{
-    audio.play().catch(()=>{});
-});
+// Start first song on user click (browser policy)
+document.addEventListener("click", ()=>{playSong(current);});
 </script>
 
 </body>
