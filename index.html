@@ -216,19 +216,26 @@ canvas.width=innerWidth; canvas.height=innerHeight;
 let p=[]; for(let k=0;k<80;k++){p.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2});}
 function anim(){ctx.clearRect(0,0,canvas.width,canvas.height); p.forEach(e=>{e.y+=0.5;if(e.y>canvas.height)e.y=0;ctx.fillStyle="white";ctx.beginPath();ctx.arc(e.x,e.y,e.s,0,Math.PI*2);ctx.fill();}); requestAnimationFrame(anim);} anim();
 
-/* RIPPLE & MUSIC START ONLY ONCE */
-const audio=document.getElementById("music");
-let isPlaying=false;
-document.addEventListener("click", e=>{
-    const r=document.createElement("div");
-    r.className="ripple";
-    r.style.left=e.clientX+"px";
-    r.style.top=e.clientY+"px";
-    r.style.width=r.style.height="20px";
-    document.body.appendChild(r);
-    setTimeout(()=>r.remove(),600);
+let hasAutoStarted = false; // track if first page click started music
+let isPlaying = false;
 
-    if(!isPlaying){audio.play().catch(()=>{}); isPlaying=true; playPauseBtn.innerText="⏸️";}
+document.addEventListener("click", e => {
+    // ripple effect
+    const r = document.createElement("div");
+    r.className = "ripple";
+    r.style.left = e.clientX + "px";
+    r.style.top = e.clientY + "px";
+    r.style.width = r.style.height = "20px";
+    document.body.appendChild(r);
+    setTimeout(() => r.remove(), 600);
+
+    // auto-start music only once
+    if(!hasAutoStarted){
+        audio.play().catch(()=>{});
+        isPlaying = true;
+        playPauseBtn.innerText = "⏸️";
+        hasAutoStarted = true;
+    }
 });
 
 /* SECRET TAP */
