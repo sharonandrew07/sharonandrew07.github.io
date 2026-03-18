@@ -11,23 +11,22 @@
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    background: radial-gradient(circle at top, #1a1a2e, #000);
+    overflow: hidden;
     color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    background: radial-gradient(circle at top, #1a1a2e, #000);
 }
 
-/* Glass container */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* Container */
 .container {
     text-align: center;
-    padding: 30px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(15px);
-    box-shadow: 0 0 40px rgba(0,0,0,0.6);
-    animation: fadeIn 1.2s ease;
+    margin-top: 60px;
 }
 
 /* Profile */
@@ -39,9 +38,9 @@ body {
     overflow: hidden;
     position: relative;
     animation: float 3s ease-in-out infinite;
+    cursor: pointer;
 }
 
-/* Glow ring */
 .profile::before {
     content: "";
     position: absolute;
@@ -69,17 +68,19 @@ body {
     50% { transform: translateY(-10px); }
 }
 
-@keyframes fadeIn {
-    from {opacity:0; transform: translateY(20px);}
-    to {opacity:1; transform: translateY(0);}
-}
-
-/* Text */
+/* Typewriter */
 h1 {
     margin-top: 15px;
     font-size: 2rem;
+    border-right: 2px solid white;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
+/* Bio */
 p {
     color: #bbb;
     margin-bottom: 25px;
@@ -104,24 +105,124 @@ a:hover {
     background: linear-gradient(45deg, #00f5ff, #ff00c8);
     box-shadow: 0 0 20px rgba(255,0,200,0.6);
 }
+
+/* Ripple */
+.ripple {
+    position: fixed;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(10);
+        opacity: 0;
+    }
+}
 </style>
 </head>
 
 <body>
 
+<canvas id="bg"></canvas>
+
 <div class="container">
 
-    <div class="profile">
+    <div class="profile" id="secretTrigger">
         <img src="PXL_20251129_172125766.jpg">
     </div>
 
-    <h1>Guruprasath</h1>
+    <h1 id="name"></h1>
     <p>calm outside. storm inside.</p>
 
     <a href="https://instagram.com/guruprasath2244">📸 Instagram</a>
-    <a href="https://wa.me/919344564778">💬 WhatsApp</a>
+
+    <a href="https://wa.me/919344564778?text=Hey%20I%20just%20saw%20your%20site%20🔥">
+        💬 WhatsApp
+    </a>
 
 </div>
+
+<audio id="music" loop>
+    <source src="" type="audio/mpeg">
+</audio>
+
+<script>
+/* 🌌 Particles */
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for (let i = 0; i < 80; i++) {
+    particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2,
+        speed: Math.random() * 0.6
+    });
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+        p.y += p.speed;
+        if (p.y > canvas.height) p.y = 0;
+
+        ctx.fillStyle = "white";
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+/* 💥 Ripple + music start */
+document.addEventListener("click", function(e) {
+    const ripple = document.createElement("div");
+    ripple.className = "ripple";
+    ripple.style.left = e.clientX + "px";
+    ripple.style.top = e.clientY + "px";
+    ripple.style.width = ripple.style.height = "20px";
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+
+    document.getElementById("music").play().catch(()=>{});
+});
+
+/* ⌨️ Typewriter */
+const text = "Guruprasath";
+let i = 0;
+
+function type() {
+    if (i < text.length) {
+        document.getElementById("name").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(type, 100);
+    }
+}
+
+type();
+
+/* 🔐 Secret trigger */
+let taps = 0;
+document.getElementById("secretTrigger").addEventListener("click", () => {
+    taps++;
+    if (taps === 5) {
+        window.location.href = "secret.html";
+    }
+});
+</script>
 
 </body>
 </html>
