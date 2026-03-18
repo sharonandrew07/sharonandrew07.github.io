@@ -11,211 +11,81 @@
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    overflow: hidden;
+    background: radial-gradient(circle at top, #1a1a2e, #000);
     color: white;
-}
-
-/* 🌌 Canvas background */
-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 /* Container */
 .container {
     text-align: center;
-    margin-top: 60px;
-    animation: fadeIn 1.5s ease;
 }
 
 /* Profile */
 .profile {
-    position: relative;
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 140px;
     margin: auto;
     border-radius: 50%;
-    animation: float 3s ease-in-out infinite;
-}
-
-.profile::before {
-    content: "";
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: linear-gradient(45deg, #00f5ff, #ff00c8, #00f5ff);
-    z-index: -1;
-    filter: blur(12px);
-    animation: spin 8s linear infinite;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(255,0,200,0.6);
 }
 
 .profile img {
     width: 100%;
     height: 100%;
-    border-radius: 50%;
     object-fit: cover;
-}
-
-/* Animations */
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(30px);}
-    to {opacity: 1; transform: translateY(0);}
 }
 
 /* Text */
 h1 {
-    font-size: 2.2rem;
-    margin: 15px 0 5px;
+    margin-top: 15px;
+    font-size: 2rem;
 }
 
 p {
-    color: #bbb;
+    color: #aaa;
     margin-bottom: 25px;
 }
 
 /* Buttons */
 a {
     display: block;
-    width: 260px;
-    margin: 12px auto;
+    width: 240px;
+    margin: 10px auto;
     padding: 14px;
-    border-radius: 14px;
+    border-radius: 10px;
     text-decoration: none;
     color: white;
-
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(12px);
-
-    border: 1px solid rgba(255,255,255,0.1);
+    background: #222;
     transition: 0.3s;
 }
 
 a:hover {
-    transform: scale(1.08);
     background: linear-gradient(45deg, #00f5ff, #ff00c8);
-    box-shadow: 0 0 25px rgba(255,0,200,0.6);
-}
-
-/* Ripple effect */
-.ripple {
-    position: fixed;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.3);
-    transform: scale(0);
-    animation: ripple 0.6s linear;
-    pointer-events: none;
-}
-
-@keyframes ripple {
-    to {
-        transform: scale(10);
-        opacity: 0;
-    }
+    transform: scale(1.05);
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
-
 <div class="container">
 
-    <div class="profile" id="secretTrigger">
-        <img src="PXL_20251129_172125766.jpg">
+    <div class="profile">
+        <img src="PXL_20251129_172125766.jpg" alt="Profile">
     </div>
 
     <h1>Guruprasath</h1>
     <p>calm outside. storm inside.</p>
 
     <a href="https://instagram.com/guruprasath2244">📸 Instagram</a>
-
-    <a href="https://wa.me/919344564778?text=Hey%20I%20just%20tapped%20your%20NFC%20card%20😄">
-        💬 WhatsApp
-    </a>
+    <a href="https://wa.me/919344564778">💬 WhatsApp</a>
 
 </div>
-
-<!-- 🎵 Background music -->
-<audio id="bgMusic" loop>
-    <source src="music.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-/* 🌌 Particles */
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-
-for (let i = 0; i < 100; i++) {
-    particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 2,
-        speed: Math.random() * 0.7
-    });
-}
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    particles.forEach(p => {
-        p.y += p.speed;
-        if (p.y > canvas.height) p.y = 0;
-
-        ctx.fillStyle = "white";
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-    });
-
-    requestAnimationFrame(animate);
-}
-
-animate();
-
-/* 💥 Ripple */
-document.addEventListener("click", function(e) {
-    const ripple = document.createElement("div");
-    ripple.className = "ripple";
-    ripple.style.left = e.clientX + "px";
-    ripple.style.top = e.clientY + "px";
-    ripple.style.width = ripple.style.height = "20px";
-    document.body.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 600);
-
-    // 🎵 Start music on first interaction
-    document.getElementById("bgMusic").play().catch(()=>{});
-});
-
-/* 🔐 Secret page trigger */
-let tapCount = 0;
-document.getElementById("secretTrigger").addEventListener("click", () => {
-    tapCount++;
-    if (tapCount === 5) {
-        window.location.href = "secret.html";
-    }
-});
-</script>
 
 </body>
 </html>
