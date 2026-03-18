@@ -161,10 +161,12 @@ a:hover { transform:scale(1.07); background:linear-gradient(45deg,#00f5ff,#ff00c
 <p class="bio">calm outside. storm inside.</p>
 
 <div class="things">
-    <span>🎧 music</span>
-    <span>🏸 badminton</span>
-    <span>🌙 night thinker</span>
-    <span>🎬 stories</span>
+    <span title="I love smashing birdies!">🏸 Badminton</span>
+    <span title="My headphones are my escape.">🎧 Music</span>
+    <span title="Late night thoughts & reflections.">🌙 Night thinker</span>
+    <span title="Movies and stories that inspire me.">🎬 Stories</span>
+    <span title="Sipping coffee while coding.">☕ Coffee</span>
+    <span title="Exploring new places is my therapy.">✈️ Travel</span>
 </div>
 
 <p id="nowPlaying"></p>
@@ -187,6 +189,22 @@ a:hover { transform:scale(1.07); background:linear-gradient(45deg,#00f5ff,#ff00c
 <a href="https://instagram.com/guruprasath2244">📸 Instagram</a>
 <a href="https://wa.me/919344564778">💬 WhatsApp</a>
 
+.things span {
+    display: inline-block;
+    padding: 6px 14px;
+    margin: 5px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+.things span:hover {
+    background: linear-gradient(45deg,#00f5ff,#ff00c8);
+    box-shadow: 0 0 10px rgba(255,0,200,0.5);
+    transform: scale(1.05);
+}
 </div>
 
 <audio id="music"></audio>
