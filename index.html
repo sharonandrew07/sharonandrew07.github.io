@@ -121,9 +121,9 @@ document.addEventListener("click",e=>{const r=document.createElement("div");r.cl
 /* SECRET */
 let taps=0; document.getElementById("secretTrigger").onclick=()=>{taps++; if(taps==5) location.href="secret.html";};
 
-/* 🔥 NEXT-LEVEL AUDIO WITH 10 SONGS */
-const songs=[
-    {name:"Apocalypse", file:"Apocalypse(MP3_320K).mp3"},
+/* 🔥 NEXT-LEVEL AUDIO WITH 10 SONGS - PLAY FULL SONGS */
+const songs = [
+  name:"Apocalypse", file:"Apocalypse(MP3_320K).mp3"},
     {name:"Starlight", file:"Starlight(MP3_320K).mp3"},
     {name:"Night Changes", file:"Night Changes(MP3_320K).mp3"},
     {name:"Until I Found You", file:"Until I Found You (Em Beihold Version)(MP3_320K).mp3"},
@@ -135,33 +135,36 @@ const songs=[
     {name:"Intro", file:"Intro(MP3_320K).mp3"}
 ];
 
-const audio=document.getElementById("music");
-const nowPlaying=document.getElementById("nowPlaying");
+const audio = document.getElementById("music");
+const nowPlaying = document.getElementById("nowPlaying");
 
-let current=Math.floor(Math.random()*songs.length);
+let current = Math.floor(Math.random() * songs.length);
 
 function playSong(index){
-    if(audio.src) fadeOut(audio,0.5,()=>{startSong(index);});
-    else startSong(index);
-}
-
-function startSong(index){
-    const song=songs[index];
-    audio.src=song.file;
-    nowPlaying.innerText="🎧 "+song.name;
-    audio.volume=0;
+    const song = songs[index];
+    audio.src = song.file;
+    nowPlaying.innerText = "🎧 " + song.name;
+    audio.volume = 0;
     audio.play().catch(()=>{});
     fadeIn(audio,0.02);
 }
 
-function fadeIn(a,step){let vol=a.volume; const f=setInterval(()=>{vol+=step;if(vol>=1){vol=1;clearInterval(f);} a.volume=vol;},50);}
-function fadeOut(a,step,cb){let vol=a.volume; const f=setInterval(()=>{vol-=step;if(vol<=0){vol=0;clearInterval(f); if(cb)cb();} a.volume=vol;},50);}
+/* Fade In/Out */
+function fadeIn(a, step){ let vol=a.volume; const f=setInterval(()=>{vol+=step;if(vol>=1){vol=1;clearInterval(f);} a.volume=vol;},50);}
+function fadeOut(a, step, cb){ let vol=a.volume; const f=setInterval(()=>{vol-=step;if(vol<=0){vol=0;clearInterval(f); if(cb)cb();} a.volume=vol;},50);}
 
 playSong(current);
 
-/* AUTO NEXT SONG EVERY 60S */
-setInterval(()=>{current=(current+1)%songs.length; playSong(current);},60000);
+/* NEXT SONG AFTER FULL PLAY */
+audio.addEventListener("ended", ()=>{
+    current = (current+1) % songs.length;
+    playSong(current);
+});
 
+/* START MUSIC ON FIRST CLICK */
+document.addEventListener("click",()=>{
+    audio.play().catch(()=>{});
+});
 </script>
 
 </body>
