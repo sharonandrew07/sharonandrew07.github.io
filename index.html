@@ -71,8 +71,26 @@ h1 {
 
 .bio { color:#bbb; margin-bottom:20px; font-size:3.5vw; max-font-size:0.9rem; }
 
-.things span { display:inline-block; padding:6px 12px; margin:5px; border-radius:20px; font-size:3vw; max-font-size:0.8rem; background: rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1);}
-.things span:hover { background:linear-gradient(45deg,#00f5ff,#ff00c8); transform:scale(1.05); }
+.things span {
+    display:inline-block;
+    padding:6px 14px;
+    margin:5px;
+    border-radius:20px;
+    font-size:0.85rem;
+    background: rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.1);
+    transition:0.3s, box-shadow 0.3s, transform 0.3s;
+    cursor:pointer;
+}
+.things span:hover {
+    background:linear-gradient(45deg,#00f5ff,#ff00c8);
+    box-shadow:0 0 15px rgba(255,0,200,0.6);
+    transform:scale(1.1);
+}
+.things span:active {
+    transform:scale(1.2);
+    box-shadow:0 0 25px rgba(0,255,255,0.8),0 0 25px rgba(255,0,200,0.8);
+}
 
 /* ===== NOW PLAYING & MESSAGES ===== */
 #nowPlaying { font-size:3vw; max-font-size:0.8rem; margin-top:5px; }
@@ -216,11 +234,12 @@ canvas.width=innerWidth; canvas.height=innerHeight;
 let p=[]; for(let k=0;k<80;k++){p.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2});}
 function anim(){ctx.clearRect(0,0,canvas.width,canvas.height); p.forEach(e=>{e.y+=0.5;if(e.y>canvas.height)e.y=0;ctx.fillStyle="white";ctx.beginPath();ctx.arc(e.x,e.y,e.s,0,Math.PI*2);ctx.fill();}); requestAnimationFrame(anim);} anim();
 
-let hasAutoStarted = false; // track if first page click started music
+/* RIPPLE & MUSIC START ONLY ONCE */
+const audio=document.getElementById("music");
+let hasAutoStarted = false;
 let isPlaying = false;
 
 document.addEventListener("click", e => {
-    // ripple effect
     const r = document.createElement("div");
     r.className = "ripple";
     r.style.left = e.clientX + "px";
@@ -229,7 +248,6 @@ document.addEventListener("click", e => {
     document.body.appendChild(r);
     setTimeout(() => r.remove(), 600);
 
-    // auto-start music only once
     if(!hasAutoStarted){
         audio.play().catch(()=>{});
         isPlaying = true;
@@ -246,7 +264,7 @@ let taps=0; document.getElementById("secretTrigger").onclick=()=>{
 
 /* SONG LIST */
 const songs = [
-  {name:"Apocalypse", file:"Apocalypse(MP3_320K).mp3"},
+    {name:"Apocalypse", file:"Apocalypse(MP3_320K).mp3"},
     {name:"Starlight", file:"Starlight(MP3_320K).mp3"},
     {name:"Night Changes", file:"Night Changes(MP3_320K).mp3"},
     {name:"Until I Found You", file:"Until I Found You (Em Beihold Version)(MP3_320K).mp3"},
@@ -281,8 +299,8 @@ const progress=document.getElementById("progress");
 const progressContainer=document.getElementById("progressContainer");
 
 playPauseBtn.addEventListener("click", ()=>{
-    if(isPlaying){audio.pause(); isPlaying=false; playPauseBtn.innerText="▶️";}
-    else{audio.play(); isPlaying=true; playPauseBtn.innerText="⏸️";}
+    if(audio.paused){ audio.play(); isPlaying=true; playPauseBtn.innerText="⏸️"; }
+    else{ audio.pause(); isPlaying=false; playPauseBtn.innerText="▶️"; }
 });
 nextBtn.addEventListener("click", ()=>{current=(current+1)%songs.length; playSong(current);});
 prevBtn.addEventListener("click", ()=>{current=(current-1+songs.length)%songs.length; playSong(current);});
