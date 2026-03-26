@@ -8,200 +8,207 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 
 <style>
-/* ===== BODY & BACKGROUND ===== */
+
+/* ===== BODY ===== */
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    overflow-x: hidden;
     color: white;
-    background: radial-gradient(circle at top, #1a1a2e, #000);
+    overflow-x: hidden;
+    background: radial-gradient(circle at top, #2b0f14, #000);
+    animation: fadeIn 1.5s ease forwards, breathe 8s ease-in-out infinite;
 }
+
+@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+@keyframes breathe {
+    0%,100% { background-size:100% 100%; }
+    50% { background-size:110% 110%; }
+}
+
 canvas { position: fixed; top:0; left:0; z-index:-1; }
 
 /* ===== CONTAINER ===== */
 .container {
-    text-align: center;
-    margin: 8vh auto 0 auto;
-    width: 90%;
-    max-width: 600px;
+    text-align:center;
+    margin:8vh auto;
+    width:90%;
+    max-width:600px;
 }
 
 /* ===== PROFILE ===== */
 .profile {
-    width: 30vw;
-    max-width: 180px;
-    aspect-ratio: 1/1;
-    margin: auto;
-    border-radius: 50%;
-    overflow: hidden;
-    position: relative;
+    width:30vw;
+    max-width:180px;
+    aspect-ratio:1/1;
+    margin:auto;
+    border-radius:50%;
+    overflow:hidden;
+    position:relative;
+    cursor:pointer;
     animation: float 3s ease-in-out infinite;
-    cursor: pointer;
 }
+
 .profile::before {
     content:"";
     position:absolute;
     inset:-5px;
     border-radius:50%;
-    background:linear-gradient(45deg,#00f5ff,#ff00c8,#00f5ff);
+    background:linear-gradient(45deg,#ff4d6d,#8a2be2,#ff4d6d);
     filter:blur(12px);
     z-index:-1;
     animation:spin 6s linear infinite;
 }
-.profile img { width: 100%; height: 100%; object-fit: cover; }
 
-@keyframes spin { 100% { transform: rotate(360deg); } }
-@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+/* heartbeat */
+.profile.active::before {
+    animation:pulseGlow 0.6s ease;
+}
+
+@keyframes pulseGlow {
+    0% { transform:scale(1); filter:blur(12px);}
+    50% { transform:scale(1.15); filter:blur(20px);}
+    100% { transform:scale(1); filter:blur(12px);}
+}
+
+.profile img { width:100%; height:100%; object-fit:cover; }
+
+@keyframes spin {100%{transform:rotate(360deg);}}
+@keyframes float {0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
 
 /* ===== TEXT ===== */
 h1 {
-    margin-top: 15px;
-    font-size: 5vw;
-    max-font-size: 2rem;
-    border-right: 2px solid white;
-    width: fit-content;
-    margin-left:auto;
-    margin-right:auto;
-    white-space: nowrap;
-    overflow: hidden;
+    margin-top:15px;
+    font-size:5vw;
+    border-right:2px solid white;
+    width:fit-content;
+    margin:auto;
+    white-space:nowrap;
+    overflow:hidden;
 }
-#intro { font-size: 3.5vw; max-font-size: 0.95rem; color: #ccc; margin-top:5px; min-height:20px; }
-.status { font-size: 3vw; max-font-size:0.8rem; color: #00ff9d; margin-bottom: 15px; animation: pulse 2s infinite; }
+
+#intro { font-size:3.5vw; color:#ccc; min-height:20px; }
+
+.status {
+    color:#ff4d6d;
+    font-size:3vw;
+    animation:pulse 2s infinite;
+}
 @keyframes pulse {0%{opacity:0.4;}50%{opacity:1;}100%{opacity:0.4;}}
 
-.bio { color:#bbb; margin-bottom:20px; font-size:3.5vw; max-font-size:0.9rem; }
+.bio { color:#bbb; margin-bottom:20px; }
 
+/* ===== TAGS ===== */
 .things span {
     display:inline-block;
     padding:6px 14px;
     margin:5px;
     border-radius:20px;
-    font-size:0.85rem;
-    background: rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.08);
     border:1px solid rgba(255,255,255,0.1);
-    transition:0.3s, box-shadow 0.3s, transform 0.3s;
-    cursor:pointer;
-}
-.things span:hover {
-    background:linear-gradient(45deg,#00f5ff,#ff00c8);
-    box-shadow:0 0 15px rgba(255,0,200,0.6);
-    transform:scale(1.1);
-}
-.things span:active {
-    transform:scale(1.2);
-    box-shadow:0 0 25px rgba(0,255,255,0.8),0 0 25px rgba(255,0,200,0.8);
-}
-
-/* ===== NOW PLAYING & MESSAGES ===== */
-#nowPlaying { font-size:3vw; max-font-size:0.8rem; margin-top:5px; }
-#timeMsg { font-size:3.5vw; max-font-size:0.9rem; color:#ccc; }
-#hiddenMsg { opacity:0; transition:1s; color:#ff77c8; font-size:3vw; max-font-size:0.9rem; }
-#hiddenMsg.show { opacity:1; }
-
-/* ===== MUSIC CONTROLS ===== */
-.music-controls {
-    margin-top: 10px;
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    flex-wrap:wrap;
-    align-items:center;
-}
-.music-controls button {
-    background: rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.1);
-    color:white;
-    padding:10px 14px;
-    border-radius:10px;
-    font-size:1rem;
     cursor:pointer;
     transition:0.3s;
 }
-.music-controls button:hover {
-    background:linear-gradient(45deg,#00f5ff,#ff00c8);
-    box-shadow:0 0 15px rgba(255,0,200,0.6);
-}
-.music-controls input[type="range"] {
-    width:120px;
-    margin:0 5px;
+.things span:hover {
+    background:linear-gradient(45deg,#ff4d6d,#8a2be2);
+    transform:scale(1.05);
 }
 
-/* ===== PROGRESS BAR ===== */
-#progressContainer {
-    width:80%;
-    max-width:300px;
-    height:5px;
-    background: rgba(255,255,255,0.2);
-    border-radius:5px;
-    margin:10px auto 0 auto;
+/* ===== MUSIC ===== */
+.music-controls {
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-top:10px;
+}
+
+.music-controls button {
+    background:rgba(255,255,255,0.08);
+    border:none;
+    padding:10px;
+    color:white;
+    border-radius:10px;
     cursor:pointer;
 }
+.music-controls button:hover {
+    background:linear-gradient(45deg,#ff4d6d,#8a2be2);
+}
+
+#progressContainer {
+    width:80%;
+    margin:10px auto;
+    height:5px;
+    background:rgba(255,255,255,0.2);
+}
 #progress {
-    width:0%;
     height:100%;
-    background: linear-gradient(45deg,#00f5ff,#ff00c8);
-    border-radius:5px;
+    width:0%;
+    background:#ff4d6d;
 }
 
-/* ===== BUTTONS ===== */
-a { display:block; width:80%; max-width:240px; margin:12px auto; padding:14px; border-radius:12px; text-decoration:none; color:white; background: rgba(255,255,255,0.08);}
-a:hover { transform:scale(1.07); background:linear-gradient(45deg,#00f5ff,#ff00c8); box-shadow:0 0 20px rgba(255,0,200,0.6); }
-
-/* ===== RIPPLE ===== */
-.ripple { position:fixed; border-radius:50%; background:rgba(255,255,255,0.3); transform:scale(0); animation:ripple 0.6s linear;}
-@keyframes ripple { to{ transform: scale(10); opacity:0; } }
-
-/* ===== RESPONSIVE ===== */
-@media (max-width:600px){
-    h1{font-size:6vw;}
-    #intro{font-size:4vw;}
-    .bio{font-size:4vw;}
-    .things span{font-size:3.5vw;}
-    #nowPlaying, .status, #timeMsg, #hiddenMsg{font-size:3.5vw;}
+/* ===== LINKS ===== */
+a {
+    display:block;
+    width:80%;
+    margin:12px auto;
+    padding:14px;
+    border-radius:12px;
+    text-decoration:none;
+    color:white;
+    background:rgba(255,255,255,0.08);
 }
+a:hover {
+    transform:scale(1.07);
+    background:linear-gradient(45deg,#ff4d6d,#8a2be2);
+}
+
+/* ripple */
+.ripple {
+    position:fixed;
+    border-radius:50%;
+    background:rgba(255,255,255,0.3);
+    transform:scale(0);
+    animation:ripple 0.6s linear;
+}
+@keyframes ripple { to{ transform:scale(10); opacity:0; } }
+
 </style>
 </head>
+
 <body>
 
 <canvas id="bg"></canvas>
 
 <div class="container">
 
-<div class="profile" id="secretTrigger">
-    <img src="PXL_20251129_172125766.jpg">
+<div class="profile" id="profile">
+<img src="PXL_20251129_172125766.jpg">
 </div>
 
 <h1 id="name"></h1>
 <p id="intro"></p>
-<p class="status">● online</p>
+<p class="status">● present</p>
 
 <p class="bio">calm outside. storm inside.</p>
 
 <div class="things">
-    <span title="I love smashing birdies!">🏸 Badminton</span>
-    <span title="My headphones are my escape.">🎧 Music</span>
-    <span title="Late night thoughts & reflections.">🌙 Night thinker</span>
-    <span title="Movies and stories that inspire me.">🎬 Stories</span>
-    <span title="Sipping coffee while coding.">☕ Coffee</span>
-    <span title="Exploring new places is my therapy.">✈️ Travel</span>
+<span>🏸 Badminton</span>
+<span>🎧 Music</span>
+<span>🌙 Night thinker</span>
+<span>🎬 Stories</span>
 </div>
 
 <p id="nowPlaying"></p>
 
-<!-- Music controls -->
 <div class="music-controls">
-    <button id="prevBtn">⏮️</button>
-    <button id="playPauseBtn">▶️</button>
-    <button id="nextBtn">⏭️</button>
-    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5" title="Volume">
+<button id="prevBtn">⏮️</button>
+<button id="playPauseBtn">▶️</button>
+<button id="nextBtn">⏭️</button>
+<input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
 </div>
 
 <div id="progressContainer">
-    <div id="progress"></div>
+<div id="progress"></div>
 </div>
-
-<p id="timeMsg"></p>
-<p id="hiddenMsg">Not everyone notices… but you did.</p>
 
 <a href="https://instagram.com/guruprasath2244">📸 Instagram</a>
 <a href="https://wa.me/919344564778">💬 WhatsApp</a>
@@ -211,123 +218,111 @@ a:hover { transform:scale(1.07); background:linear-gradient(45deg,#00f5ff,#ff00c
 <audio id="music"></audio>
 
 <script>
-/* ===== NAME & INTRO TYPING ===== */
+
+/* typing */
 let name="Guruprasath",i=0;
 function type(){if(i<name.length){document.getElementById("name").innerHTML+=name[i++];setTimeout(type,100);}} type();
-let intro="Not always loud. But always real.", j=0;
-function introType(){if(j<intro.length){document.getElementById("intro").innerHTML+=intro[j++]; setTimeout(introType,40);}}
+
+let intro="Not always loud. But always real.",j=0;
+function introType(){if(j<intro.length){document.getElementById("intro").innerHTML+=intro[j++];setTimeout(introType,40);}}
 setTimeout(introType,1200);
 
-/* TIME & HIDDEN MESSAGES */
-const hour=new Date().getHours();
-document.getElementById("timeMsg").innerText=
-    hour<12?"Starting slow…":hour<18?"In the middle of something.":hour<22?"Evenings feel different.":"Late nights. Real thoughts.";
-setTimeout(()=>{document.getElementById("hiddenMsg").classList.add("show");},6000);
-
-/* BIO MOOD SWITCH */
-const moods=["calm outside. storm inside.","silent… but not empty.","feels everything. says nothing.","not lost. just thinking deeper."];
-setInterval(()=>{document.querySelector(".bio").innerText=moods[Math.floor(Math.random()*moods.length)];},5000);
-
-/* PARTICLES */
+/* particles */
 const canvas=document.getElementById("bg"),ctx=canvas.getContext("2d");
 canvas.width=innerWidth; canvas.height=innerHeight;
-let p=[]; for(let k=0;k<80;k++){p.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2});}
-function anim(){ctx.clearRect(0,0,canvas.width,canvas.height); p.forEach(e=>{e.y+=0.5;if(e.y>canvas.height)e.y=0;ctx.fillStyle="white";ctx.beginPath();ctx.arc(e.x,e.y,e.s,0,Math.PI*2);ctx.fill();}); requestAnimationFrame(anim);} anim();
+let p=[];
+for(let i=0;i<80;i++){p.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2});}
+function anim(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+p.forEach(e=>{e.y+=0.5;if(e.y>canvas.height)e.y=0;
+ctx.fillStyle="white";
+ctx.beginPath();
+ctx.arc(e.x,e.y,e.s,0,Math.PI*2);
+ctx.fill();});
+requestAnimationFrame(anim);}
+anim();
 
-/* RIPPLE & MUSIC START ONLY ONCE */
+/* AUDIO */
 const audio=document.getElementById("music");
-let hasAutoStarted = false;
-let isPlaying = false;
-
-document.addEventListener("click", e => {
-    const r = document.createElement("div");
-    r.className = "ripple";
-    r.style.left = e.clientX + "px";
-    r.style.top = e.clientY + "px";
-    r.style.width = r.style.height = "20px";
-    document.body.appendChild(r);
-    setTimeout(() => r.remove(), 600);
-
-    if(!hasAutoStarted){
-        audio.play().catch(()=>{});
-        isPlaying = true;
-        playPauseBtn.innerText = "⏸️";
-        hasAutoStarted = true;
-    }
-});
-
-/* SECRET TAP */
-let taps=0; document.getElementById("secretTrigger").onclick=()=>{
-    taps++; 
-    if(taps==5) location.href="secret.html";
-};
-
-/* SONG LIST */
-const songs = [
-    {name:"Apocalypse", file:"Apocalypse(MP3_320K).mp3"},
-    {name:"Starlight", file:"Starlight(MP3_320K).mp3"},
-    {name:"Night Changes", file:"Night Changes(MP3_320K).mp3"},
-    {name:"Until I Found You", file:"Until I Found You (Em Beihold Version)(MP3_320K).mp3"},
-    {name:"Stranger Flame", file:"Stranger's  flame re edit.mp3"},
-    {name:"Love is a Laserquest", file:"Love is a Laserquest(MP3_320K).mp3"},
-    {name:"To Build a Home", file:"To Build A Home(MP3_320K).mp3"},
-    {name:"Someone You Loved", file:"Someone You Loved(MP3_320K).mp3"},
-    {name:"Motion Picture Soundtrack", file:"Motion Picture Soundtrack(MP3_320K).mp3"},
-    {name:"Intro", file:"Intro(MP3_320K).mp3"}
-];
-
-const nowPlaying=document.getElementById("nowPlaying");
-let current=Math.floor(Math.random()*songs.length);
-
-/* ===== MUSIC FUNCTIONS ===== */
-function playSong(index){
-    const song=songs[index];
-    audio.src=song.file;
-    nowPlaying.innerText="🎧 "+song.name;
-    audio.volume=volumeSlider.value;
-    audio.play().catch(()=>{});
-    isPlaying=true;
-    playPauseBtn.innerText="⏸️";
-}
-
-/* PLAY/PAUSE, NEXT, PREV */
 const playPauseBtn=document.getElementById("playPauseBtn");
 const nextBtn=document.getElementById("nextBtn");
 const prevBtn=document.getElementById("prevBtn");
 const volumeSlider=document.getElementById("volumeSlider");
 const progress=document.getElementById("progress");
 const progressContainer=document.getElementById("progressContainer");
+const nowPlaying=document.getElementById("nowPlaying");
 
-playPauseBtn.addEventListener("click", ()=>{
-    if(audio.paused){ audio.play(); isPlaying=true; playPauseBtn.innerText="⏸️"; }
-    else{ audio.pause(); isPlaying=false; playPauseBtn.innerText="▶️"; }
-});
-nextBtn.addEventListener("click", ()=>{current=(current+1)%songs.length; playSong(current);});
-prevBtn.addEventListener("click", ()=>{current=(current-1+songs.length)%songs.length; playSong(current);});
+const songs = [
+{name:"Apocalypse", file:"Apocalypse(MP3_320K).mp3"},
+{name:"Starlight", file:"Starlight(MP3_320K).mp3"},
+{name:"Night Changes", file:"Night Changes(MP3_320K).mp3"},
+{name:"Until I Found You", file:"Until I Found You (Em Beihold Version)(MP3_320K).mp3"},
+{name:"Stranger Flame", file:"Stranger's  flame re edit.mp3"},
+{name:"Love is a Laserquest", file:"Love is a Laserquest(MP3_320K).mp3"},
+{name:"To Build a Home", file:"To Build A Home(MP3_320K).mp3"},
+{name:"Someone You Loved", file:"Someone You Loved(MP3_320K).mp3"},
+{name:"Motion Picture Soundtrack", file:"Motion Picture Soundtrack(MP3_320K).mp3"},
+{name:"Intro", file:"Intro(MP3_320K).mp3"}
+];
 
-/* VOLUME */
-volumeSlider.addEventListener("input", ()=>{audio.volume=volumeSlider.value;});
+let current=0;
 
-/* PROGRESS BAR UPDATE */
-audio.addEventListener("timeupdate", ()=>{
-    const percent=(audio.currentTime/audio.duration)*100;
-    progress.style.width=percent+"%";
-});
+/* play song */
+function playSong(index){
+audio.src=songs[index].file;
+nowPlaying.innerText="🎧 "+songs[index].name;
+audio.volume=volumeSlider.value;
+audio.play();
+playPauseBtn.innerText="⏸️";
+}
 
-/* SEEK ON PROGRESS CLICK */
-progressContainer.addEventListener("click", e=>{
-    const rect=progressContainer.getBoundingClientRect();
-    const clickX=e.clientX-rect.left;
-    const width=rect.width;
-    const newTime=(clickX/width)*audio.duration;
-    audio.currentTime=newTime;
-});
+/* controls */
+playPauseBtn.onclick=()=>{
+if(audio.paused){audio.play(); playPauseBtn.innerText="⏸️";}
+else{audio.pause(); playPauseBtn.innerText="▶️";}
+};
 
-/* AUTO NEXT WHEN SONG ENDS */
-audio.addEventListener("ended", ()=>{current=(current+1)%songs.length; playSong(current);});
+nextBtn.onclick=()=>{current=(current+1)%songs.length;playSong(current);};
+prevBtn.onclick=()=>{current=(current-1+songs.length)%songs.length;playSong(current);};
 
-/* START FIRST SONG */
+volumeSlider.oninput=()=>audio.volume=volumeSlider.value;
+
+audio.ontimeupdate=()=>{
+progress.style.width=(audio.currentTime/audio.duration)*100+"%";
+};
+
+progressContainer.onclick=e=>{
+const rect=progressContainer.getBoundingClientRect();
+audio.currentTime=(e.clientX-rect.left)/rect.width*audio.duration;
+};
+
+audio.onended=()=>nextBtn.onclick();
+
+/* START ONLY ON FIRST CLICK */
+let started=false;
+document.addEventListener("click",()=>{
+if(!started){
 playSong(current);
+started=true;
+}
+});
+
+/* PROFILE EFFECT */
+const profile=document.getElementById("profile");
+
+profile.onclick=()=>{
+profile.classList.add("active");
+setTimeout(()=>profile.classList.remove("active"),600);
+
+/* ripple from center */
+const ripple=document.createElement("div");
+ripple.className="ripple";
+ripple.style.left=innerWidth/2+"px";
+ripple.style.top=innerHeight/2+"px";
+document.body.appendChild(ripple);
+setTimeout(()=>ripple.remove(),600);
+};
+
 </script>
 
 </body>
