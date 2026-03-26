@@ -16,13 +16,8 @@ body {
     color: white;
     overflow-x: hidden;
     background: radial-gradient(circle at top, #2b0f14, #000);
-    animation: fadeIn 1.5s ease forwards, breathe 8s ease-in-out infinite;
-}
-
-@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-@keyframes breathe {
-    0%,100% { background-size:100% 100%; }
-    50% { background-size:110% 110%; }
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 canvas { position: fixed; top:0; left:0; z-index:-1; }
@@ -59,15 +54,12 @@ canvas { position: fixed; top:0; left:0; z-index:-1; }
     animation:spin 6s linear infinite;
 }
 
-/* heartbeat */
 .profile.active::before {
     animation:pulseGlow 0.6s ease;
 }
 
 @keyframes pulseGlow {
-    0% { transform:scale(1); filter:blur(12px);}
     50% { transform:scale(1.15); filter:blur(20px);}
-    100% { transform:scale(1); filter:blur(12px);}
 }
 
 .profile img { width:100%; height:100%; object-fit:cover; }
@@ -138,6 +130,7 @@ h1 {
     margin:10px auto;
     height:5px;
     background:rgba(255,255,255,0.2);
+    cursor:pointer;
 }
 #progress {
     height:100%;
@@ -161,15 +154,23 @@ a:hover {
     background:linear-gradient(45deg,#ff4d6d,#8a2be2);
 }
 
-/* ripple */
+/* ===== RIPPLE ===== */
 .ripple {
-    position:fixed;
-    border-radius:50%;
-    background:rgba(255,255,255,0.3);
-    transform:scale(0);
-    animation:ripple 0.6s linear;
+    position: fixed;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    transform: translate(-50%, -50%) scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+    z-index: 9999;
 }
-@keyframes ripple { to{ transform:scale(10); opacity:0; } }
+
+@keyframes ripple {
+    to {
+        transform: translate(-50%, -50%) scale(12);
+        opacity: 0;
+    }
+}
 
 </style>
 </head>
@@ -219,30 +220,37 @@ a:hover {
 
 <script>
 
-/* typing */
+/* ===== TYPE EFFECT ===== */
 let name="Guruprasath",i=0;
-function type(){if(i<name.length){document.getElementById("name").innerHTML+=name[i++];setTimeout(type,100);}} type();
+function type(){if(i<name.length){nameEl.innerHTML+=name[i++];setTimeout(type,100);}}
+const nameEl=document.getElementById("name");
+type();
 
 let intro="Not always loud. But always real.",j=0;
-function introType(){if(j<intro.length){document.getElementById("intro").innerHTML+=intro[j++];setTimeout(introType,40);}}
+function introType(){if(j<intro.length){introEl.innerHTML+=intro[j++];setTimeout(introType,40);}}
+const introEl=document.getElementById("intro");
 setTimeout(introType,1200);
 
-/* particles */
+/* ===== PARTICLES ===== */
 const canvas=document.getElementById("bg"),ctx=canvas.getContext("2d");
 canvas.width=innerWidth; canvas.height=innerHeight;
 let p=[];
 for(let i=0;i<80;i++){p.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*2});}
 function anim(){
 ctx.clearRect(0,0,canvas.width,canvas.height);
-p.forEach(e=>{e.y+=0.5;if(e.y>canvas.height)e.y=0;
-ctx.fillStyle="white";
+p.forEach(e=>{
+e.y+=0.5;
+if(e.y>canvas.height)e.y=0;
 ctx.beginPath();
 ctx.arc(e.x,e.y,e.s,0,Math.PI*2);
-ctx.fill();});
-requestAnimationFrame(anim);}
+ctx.fillStyle="white";
+ctx.fill();
+});
+requestAnimationFrame(anim);
+}
 anim();
 
-/* AUDIO */
+/* ===== AUDIO ===== */
 const audio=document.getElementById("music");
 const playPauseBtn=document.getElementById("playPauseBtn");
 const nextBtn=document.getElementById("nextBtn");
@@ -252,34 +260,34 @@ const progress=document.getElementById("progress");
 const progressContainer=document.getElementById("progressContainer");
 const nowPlaying=document.getElementById("nowPlaying");
 
-const songs = [
-{name:"Apocalypse", file:"Apocalypse(MP3_320K).mp3"},
-{name:"Starlight", file:"Starlight(MP3_320K).mp3"},
-{name:"Night Changes", file:"Night Changes(MP3_320K).mp3"},
-{name:"Until I Found You", file:"Until I Found You (Em Beihold Version)(MP3_320K).mp3"},
-{name:"Stranger Flame", file:"Stranger's  flame re edit.mp3"},
-{name:"Love is a Laserquest", file:"Love is a Laserquest(MP3_320K).mp3"},
-{name:"To Build a Home", file:"To Build A Home(MP3_320K).mp3"},
-{name:"Someone You Loved", file:"Someone You Loved(MP3_320K).mp3"},
-{name:"Motion Picture Soundtrack", file:"Motion Picture Soundtrack(MP3_320K).mp3"},
-{name:"Intro", file:"Intro(MP3_320K).mp3"}
+const songs=[
+{name:"Apocalypse",file:"Apocalypse(MP3_320K).mp3"},
+{name:"Starlight",file:"Starlight(MP3_320K).mp3"},
+{name:"Night Changes",file:"Night Changes(MP3_320K).mp3"},
+{name:"Until I Found You",file:"Until I Found You (Em Beihold Version)(MP3_320K).mp3"},
+{name:"Stranger Flame",file:"Stranger's  flame re edit.mp3"},
+{name:"Love is a Laserquest",file:"Love is a Laserquest(MP3_320K).mp3"},
+{name:"To Build a Home",file:"To Build A Home(MP3_320K).mp3"},
+{name:"Someone You Loved",file:"Someone You Loved(MP3_320K).mp3"},
+{name:"Motion Picture Soundtrack",file:"Motion Picture Soundtrack(MP3_320K).mp3"},
+{name:"Intro",file:"Intro(MP3_320K).mp3"}
 ];
 
 let current=0;
 
-/* play song */
+/* play */
 function playSong(index){
 audio.src=songs[index].file;
 nowPlaying.innerText="🎧 "+songs[index].name;
 audio.volume=volumeSlider.value;
-audio.play();
+audio.play().catch(()=>{});
 playPauseBtn.innerText="⏸️";
 }
 
 /* controls */
 playPauseBtn.onclick=()=>{
-if(audio.paused){audio.play(); playPauseBtn.innerText="⏸️";}
-else{audio.pause(); playPauseBtn.innerText="▶️";}
+if(audio.paused){audio.play();playPauseBtn.innerText="⏸️";}
+else{audio.pause();playPauseBtn.innerText="▶️";}
 };
 
 nextBtn.onclick=()=>{current=(current+1)%songs.length;playSong(current);};
@@ -307,18 +315,24 @@ started=true;
 }
 });
 
-/* PROFILE EFFECT */
+/* ===== PROFILE (RIPPLE + SECRET) ===== */
 const profile=document.getElementById("profile");
+let taps=0;
 
 profile.onclick=()=>{
+taps++;
+if(taps===5) window.location.href="secret.html";
+
 profile.classList.add("active");
 setTimeout(()=>profile.classList.remove("active"),600);
 
-/* ripple from center */
+/* ripple */
+const rect=profile.getBoundingClientRect();
 const ripple=document.createElement("div");
 ripple.className="ripple";
-ripple.style.left=innerWidth/2+"px";
-ripple.style.top=innerHeight/2+"px";
+ripple.style.left=rect.left+rect.width/2+"px";
+ripple.style.top=rect.top+rect.height/2+"px";
+
 document.body.appendChild(ripple);
 setTimeout(()=>ripple.remove(),600);
 };
