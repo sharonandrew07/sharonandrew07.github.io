@@ -14,50 +14,61 @@ body{
 margin:0;
 font-family:'Poppins',sans-serif;
 color:white;
-background:radial-gradient(circle at top,#1a1a2e,#000);
-overflow-x:hidden;
+background:radial-gradient(circle at top,#0f0f1a,#000);
+overflow:hidden;
 }
 
+/* BACKGROUND */
 canvas{position:fixed;top:0;left:0;z-index:-1;}
 
-.container{text-align:center;margin:8vh auto;width:90%;max-width:600px;}
+/* CONTAINER */
+.container{text-align:center;margin-top:8vh;}
 
+/* PROFILE */
 .profile{
 width:140px;height:140px;margin:auto;border-radius:50%;
-overflow:hidden;position:relative;cursor:pointer;
-animation:float 3s infinite ease-in-out;
+overflow:hidden;position:relative;
+transition:transform 0.2s ease;
 }
 .profile::before{
-content:"";position:absolute;inset:-5px;border-radius:50%;
+content:"";position:absolute;inset:-6px;border-radius:50%;
 background:linear-gradient(45deg,#00f5ff,#ff00c8,#00f5ff);
-filter:blur(12px);z-index:-1;animation:spin 6s linear infinite;
+filter:blur(14px);
+animation:breath 4s infinite ease-in-out;
+z-index:-1;
+}
+@keyframes breath{
+0%,100%{opacity:0.6;}
+50%{opacity:1;}
 }
 .profile img{width:100%;height:100%;object-fit:cover;}
 
-@keyframes spin{100%{transform:rotate(360deg);}}
-@keyframes float{50%{transform:translateY(-10px);}}
-
 h1{
-margin-top:15px;font-size:28px;border-right:2px solid white;
+margin-top:15px;
+border-right:2px solid white;
 white-space:nowrap;overflow:hidden;width:fit-content;margin:auto;
 }
 
-.status{color:#00ff9d;animation:pulse 2s infinite;}
-@keyframes pulse{50%{opacity:0.4;}}
+/* TEXT */
+.status{color:#00ff9d;margin:10px 0;}
+.bio{color:#bbb;margin-bottom:15px;}
+#nfcMsg{color:#888;font-size:0.85rem;margin-bottom:10px;}
 
-.bio{color:#bbb;margin-bottom:20px;}
-
+/* TAGS */
 .things span{
-display:inline-block;padding:8px 14px;margin:6px;border-radius:20px;
+display:inline-block;margin:6px;padding:8px 14px;
+border-radius:20px;
 background:rgba(255,255,255,0.08);
 border:1px solid rgba(255,255,255,0.1);
-cursor:pointer;transition:0.3s;
+cursor:pointer;
+transition:0.2s;
 }
 .things span:active{
 transform:scale(1.2);
 background:linear-gradient(45deg,#00f5ff,#ff00c8);
 }
 
+/* POPUP */
 .popup{
 position:fixed;bottom:30px;left:50%;
 transform:translateX(-50%) translateY(100px);
@@ -65,14 +76,12 @@ background:rgba(0,0,0,0.8);
 padding:12px 20px;border-radius:20px;
 opacity:0;transition:0.4s;
 }
-.popup.show{
-transform:translateX(-50%) translateY(0);
-opacity:1;
-}
+.popup.show{transform:translateX(-50%) translateY(0);opacity:1;}
 
+/* MUSIC */
 .music-controls button{
 margin:5px;padding:10px;border:none;border-radius:10px;
-background:rgba(255,255,255,0.1);color:white;cursor:pointer;
+background:rgba(255,255,255,0.1);color:white;
 }
 
 #progressContainer{
@@ -84,16 +93,19 @@ height:100%;width:0%;
 background:linear-gradient(45deg,#00f5ff,#ff00c8);
 }
 
+/* LINKS */
 a{
 display:block;margin:10px auto;width:200px;padding:12px;
-border-radius:10px;text-decoration:none;color:white;
+border-radius:10px;color:white;text-decoration:none;
 background:rgba(255,255,255,0.08);
 }
 
+/* RIPPLE */
 .ripple{
 position:fixed;border-radius:50%;
 background:rgba(255,255,255,0.3);
-transform:scale(0);animation:ripple 0.6s linear;
+transform:scale(0);
+animation:ripple 0.6s linear;
 }
 @keyframes ripple{to{transform:scale(10);opacity:0;}}
 </style>
@@ -105,14 +117,17 @@ transform:scale(0);animation:ripple 0.6s linear;
 
 <div class="container">
 
-<div class="profile" id="secretTrigger">
+<div class="profile" id="profile">
 <img src="PXL_20251129_172125766.jpg">
 </div>
 
 <h1 id="name"></h1>
+
+<p id="nfcMsg">You didn’t search me… you found me.</p>
+
 <p class="status">● online</p>
 
-<p class="bio">calm outside. storm inside.</p>
+<p class="bio" id="bio"></p>
 
 <div class="things">
 <span onclick="showPopup('badminton')">🏸 badminton</span>
@@ -124,9 +139,9 @@ transform:scale(0);animation:ripple 0.6s linear;
 <p id="nowPlaying"></p>
 
 <div class="music-controls">
-<button id="prevBtn">⏮</button>
-<button id="playPauseBtn">▶</button>
-<button id="nextBtn">⏭</button>
+<button id="prev">⏮</button>
+<button id="play">▶</button>
+<button id="next">⏭</button>
 </div>
 
 <div id="progressContainer"><div id="progress"></div></div>
@@ -138,27 +153,43 @@ transform:scale(0);animation:ripple 0.6s linear;
 
 <div id="popup" class="popup"></div>
 
-<audio id="music"></audio>
+<audio id="audio"></audio>
 
 <script>
 
-/* TYPE */
-let text="Guruprasath",i=0;
-(function type(){if(i<text.length){document.getElementById("name").innerHTML+=text[i++];setTimeout(type,100);}})();
+/* NAME */
+let name="Guruprasath",i=0;
+(function t(){if(i<name.length){document.getElementById("name").innerHTML+=name[i++];setTimeout(t,100);}})();
+
+/* TIME-BASED BIO */
+const hour=new Date().getHours();
+const bio=document.getElementById("bio");
+
+if(hour<12) bio.innerText="Still waking up… not fully here yet.";
+else if(hour<18) bio.innerText="Somewhere between focus and thoughts.";
+else if(hour<22) bio.innerText="Evenings feel heavier than they should.";
+else bio.innerText="This is when everything gets loud inside.";
 
 /* PARTICLES */
 const c=document.getElementById("bg"),ctx=c.getContext("2d");
 c.width=innerWidth;c.height=innerHeight;
-let p=[];for(let i=0;i<80;i++){p.push({x:Math.random()*c.width,y:Math.random()*c.height,s:Math.random()*2});}
+let p=[];for(let i=0;i<70;i++){p.push({x:Math.random()*c.width,y:Math.random()*c.height,s:Math.random()*2});}
 (function anim(){
 ctx.clearRect(0,0,c.width,c.height);
-p.forEach(e=>{e.y+=0.5;if(e.y>c.height)e.y=0;ctx.beginPath();ctx.arc(e.x,e.y,e.s,0,6.28);ctx.fillStyle="white";ctx.fill();});
+p.forEach(e=>{e.y+=0.4;if(e.y>c.height)e.y=0;ctx.beginPath();ctx.arc(e.x,e.y,e.s,0,6.28);ctx.fillStyle="white";ctx.fill();});
 requestAnimationFrame(anim);
 })();
 
+/* MAGNETIC PROFILE */
+const profile=document.getElementById("profile");
+document.addEventListener("mousemove",e=>{
+let x=(e.clientX/window.innerWidth-0.5)*20;
+let y=(e.clientY/window.innerHeight-0.5)*20;
+profile.style.transform=`translate(${x}px,${y}px)`;
+});
+
 /* MUSIC */
-const songs=[
-{name:"Apocalypse",file:"Apocalypse(MP3_320K).mp3"},
+const songs=[{name:"Apocalypse",file:"Apocalypse(MP3_320K).mp3"},
 {name:"Starlight",file:"Starlight(MP3_320K).mp3"},
 {name:"Night Changes",file:"Night Changes(MP3_320K).mp3"},
 {name:"Until I Found You",file:"Until I Found You (Em Beihold Version)(MP3_320K).mp3"},
@@ -167,20 +198,14 @@ const songs=[
 {name:"To Build a Home",file:"To Build A Home(MP3_320K).mp3"},
 {name:"Someone You Loved",file:"Someone You Loved(MP3_320K).mp3"},
 {name:"Motion Picture Soundtrack",file:"Motion Picture Soundtrack(MP3_320K).mp3"},
-{name:"Intro",file:"Intro(MP3_320K).mp3"}
-];
+{name:"Intro",file:"Intro(MP3_320K).mp3"}];
 
-const audio=document.getElementById("music");
+const audio=document.getElementById("audio");
 const nowPlaying=document.getElementById("nowPlaying");
-const playPauseBtn=document.getElementById("playPauseBtn");
-const nextBtn=document.getElementById("nextBtn");
-const prevBtn=document.getElementById("prevBtn");
-const progress=document.getElementById("progress");
 
 let current=Math.floor(Math.random()*songs.length);
 let started=false;
 
-/* FADE */
 function fadeOut(cb){
 let v=audio.volume;
 let f=setInterval(()=>{
@@ -189,13 +214,12 @@ if(v<=0){clearInterval(f);if(cb)cb();}
 audio.volume=v;
 },50);
 }
+
 function fadeIn(){
-let v=0;
 audio.volume=0;
 let f=setInterval(()=>{
-v+=0.05;
-if(v>=1){clearInterval(f);}
-audio.volume=v;
+audio.volume+=0.05;
+if(audio.volume>=1)clearInterval(f);
 },50);
 }
 
@@ -208,27 +232,23 @@ fadeIn();
 });
 }
 
-/* CONTROLS */
-playPauseBtn.onclick=()=>{
-if(audio.paused){audio.play();playPauseBtn.innerText="⏸";}
-else{audio.pause();playPauseBtn.innerText="▶";}
+document.getElementById("play").onclick=()=>{
+if(audio.paused){audio.play();this.innerText="⏸";}
+else{audio.pause();this.innerText="▶";}
 };
 
-nextBtn.onclick=()=>{current=(current+1)%songs.length;playSong(current);};
-prevBtn.onclick=()=>{current=(current-1+songs.length)%songs.length;playSong(current);};
+document.getElementById("next").onclick=()=>{current=(current+1)%songs.length;playSong(current);};
+document.getElementById("prev").onclick=()=>{current=(current-1+songs.length)%songs.length;playSong(current);};
 
 audio.ontimeupdate=()=>{
 if(audio.duration){
-progress.style.width=(audio.currentTime/audio.duration)*100+"%";
+document.getElementById("progress").style.width=(audio.currentTime/audio.duration)*100+"%";
 }
 };
 
-audio.onended=()=>{
-current=(current+1)%songs.length;
-playSong(current);
-};
+audio.onended=()=>{current=(current+1)%songs.length;playSong(current);};
 
-/* RIPPLE + FIRST TAP */
+/* TAP START + RIPPLE + VIBRATION */
 document.addEventListener("click",e=>{
 let r=document.createElement("div");
 r.className="ripple";
@@ -238,36 +258,33 @@ r.style.width=r.style.height="20px";
 document.body.appendChild(r);
 setTimeout(()=>r.remove(),600);
 
+if(navigator.vibrate) navigator.vibrate(20);
+
 if(!started){
 playSong(current);
 started=true;
 }
 });
 
-/* SECRET FIX */
+/* SECRET */
 let taps=0;
-const profile=document.getElementById("secretTrigger");
-
 profile.addEventListener("click",(e)=>{
-e.stopPropagation(); // 🔥 FIX
+e.stopPropagation();
 taps++;
-if(taps===5){
-window.location.href="secret.html";
-}
+if(taps===5) location.href="secret.html";
 });
 
-/* POPUP */
+/* POPUPS */
 const popup=document.getElementById("popup");
 
 function showPopup(type){
-const map={
+const data={
 badminton:"It’s the only place my mind goes silent.",
 music:"Some songs understand me better than people.",
 thoughts:"I smile outside… there’s more inside.",
 stories:"One day, I’ll tell everything."
 };
-
-popup.innerText=map[type];
+popup.innerText=data[type];
 popup.classList.add("show");
 setTimeout(()=>popup.classList.remove("show"),2500);
 
