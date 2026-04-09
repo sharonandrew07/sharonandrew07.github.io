@@ -8,171 +8,79 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 
 <style>
-*{user-select:none;-webkit-tap-highlight-color:transparent;}
-
 body{
-margin:0;
-font-family:'Poppins',sans-serif;
-color:white;
-background:radial-gradient(circle at top,#1a1a2e,#000);
-overflow-x:hidden;
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    color:white;
+    background:radial-gradient(circle at top,#1a1a2e,#000);
+    overflow-x:hidden;
+    user-select:none;
 }
+canvas{position:fixed;top:0;left:0;z-index:-1}
 
-canvas{position:fixed;top:0;left:0;z-index:-1;}
-
-/* CONTAINER */
-.container{
-text-align:center;
-margin:8vh auto;
-width:90%;
-max-width:600px;
-}
+.container{text-align:center;margin-top:8vh}
 
 /* PROFILE */
 .profile{
-width:140px;
-height:140px;
-margin:auto;
-border-radius:50%;
-overflow:hidden;
-position:relative;
-animation:float 3s ease-in-out infinite;
-cursor:pointer;
+    width:140px;height:140px;margin:auto;border-radius:50%;
+    overflow:hidden;position:relative;cursor:pointer;
+    animation:float 3s ease-in-out infinite;
 }
 .profile::before{
-content:"";
-position:absolute;
-inset:-5px;
-border-radius:50%;
-background:linear-gradient(45deg,#00f5ff,#ff00c8,#00f5ff);
-filter:blur(12px);
-z-index:-1;
-animation:spin 6s linear infinite;
+    content:"";position:absolute;inset:-5px;border-radius:50%;
+    background:linear-gradient(45deg,#00f5ff,#ff00c8,#00f5ff);
+    filter:blur(12px);z-index:-1;animation:spin 6s linear infinite;
 }
-.profile img{width:100%;height:100%;object-fit:cover;}
+.profile img{width:100%;height:100%;object-fit:cover}
 
-@keyframes spin{100%{transform:rotate(360deg);}}
-@keyframes float{50%{transform:translateY(-10px);}}
+@keyframes spin{100%{transform:rotate(360deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 
 /* TEXT */
-h1{
-margin-top:15px;
-font-size:2rem;
-border-right:2px solid white;
-white-space:nowrap;
-overflow:hidden;
-width:fit-content;
-margin-left:auto;
-margin-right:auto;
-}
+h1{margin-top:15px;font-size:2rem;border-right:2px solid white;width:fit-content;margin:auto;white-space:nowrap;overflow:hidden}
+#intro{font-size:0.9rem;color:#ccc}
+.status{color:#00ff9d;font-size:0.8rem;margin-bottom:10px}
 
-.status{
-font-size:0.9rem;
-color:#00ff9d;
-margin:10px 0;
-animation:pulse 2s infinite;
-}
-@keyframes pulse{50%{opacity:0.4;}}
-
-.bio{
-color:#bbb;
-margin-bottom:15px;
-font-size:0.9rem;
-}
+.bio{color:#bbb;margin-bottom:15px}
 
 /* TAGS */
 .things span{
-display:inline-block;
-padding:6px 12px;
-margin:5px;
-border-radius:20px;
-font-size:0.8rem;
-background:rgba(255,255,255,0.08);
-border:1px solid rgba(255,255,255,0.1);
-cursor:pointer;
-transition:0.2s;
+    display:inline-block;padding:6px 12px;margin:5px;border-radius:20px;
+    font-size:0.8rem;background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.1);
+    cursor:pointer;transition:0.3s;
 }
 .things span:hover{
-background:linear-gradient(45deg,#00f5ff,#ff00c8);
-transform:scale(1.05);
-}
-
-/* POPUP */
-.popup{
-position:fixed;
-bottom:30px;
-left:50%;
-transform:translateX(-50%) translateY(100px);
-background:rgba(0,0,0,0.8);
-padding:12px 20px;
-border-radius:20px;
-opacity:0;
-transition:0.4s;
-font-size:0.85rem;
-}
-.popup.show{
-transform:translateX(-50%) translateY(0);
-opacity:1;
+    background:linear-gradient(45deg,#00f5ff,#ff00c8);
+    transform:scale(1.1);
 }
 
 /* MUSIC */
 .music-controls{
-margin-top:10px;
+    display:flex;justify-content:center;gap:10px;margin-top:10px;
 }
 .music-controls button{
-margin:5px;
-padding:10px;
-border:none;
-border-radius:10px;
-background:rgba(255,255,255,0.1);
-color:white;
-cursor:pointer;
+    background:rgba(255,255,255,0.08);
+    border:none;color:white;padding:8px 12px;border-radius:8px;
 }
+#progressContainer{width:80%;margin:10px auto;height:5px;background:#333;border-radius:5px}
+#progress{height:100%;width:0;background:linear-gradient(45deg,#00f5ff,#ff00c8)}
 
-/* PROGRESS */
-#progressContainer{
-width:80%;
-max-width:300px;
-margin:10px auto;
-height:5px;
-background:rgba(255,255,255,0.2);
-border-radius:5px;
-}
-#progress{
-height:100%;
-width:0%;
-background:linear-gradient(45deg,#00f5ff,#ff00c8);
-border-radius:5px;
-}
-
-/* LINKS */
 a{
-display:block;
-width:80%;
-max-width:240px;
-margin:12px auto;
-padding:14px;
-border-radius:12px;
-text-decoration:none;
-color:white;
-background:rgba(255,255,255,0.08);
+    display:block;margin:12px auto;padding:12px;width:200px;
+    border-radius:10px;color:white;text-decoration:none;
+    background:rgba(255,255,255,0.08);
 }
-a:hover{
-transform:scale(1.05);
-background:linear-gradient(45deg,#00f5ff,#ff00c8);
-}
+a:hover{background:linear-gradient(45deg,#00f5ff,#ff00c8)}
 
 /* RIPPLE */
 .ripple{
-position:fixed;
-border-radius:50%;
-background:rgba(255,255,255,0.3);
-transform:scale(0);
-animation:ripple 0.6s linear;
+    position:fixed;border-radius:50%;
+    background:rgba(255,255,255,0.3);
+    transform:scale(0);
+    animation:ripple 0.6s linear;
 }
-@keyframes ripple{
-to{transform:scale(10);opacity:0;}
-}
+@keyframes ripple{to{transform:scale(8);opacity:0}}
 </style>
 </head>
 
@@ -182,195 +90,149 @@ to{transform:scale(10);opacity:0;}
 
 <div class="container">
 
-<div class="profile" id="profile">
+<div class="profile" id="secretTrigger">
 <img src="PXL_20251129_172125766.jpg">
 </div>
 
 <h1 id="name"></h1>
-
+<p id="intro"></p>
 <p class="status">● online</p>
 
-<p class="bio" id="bio"></p>
+<p class="bio">calm outside. storm inside.</p>
 
 <div class="things">
-<span onclick="showPopup('badminton')">🏸 badminton</span>
-<span onclick="showPopup('music')">🎧 music</span>
-<span onclick="showPopup('thoughts')">🌙 thoughts</span>
-<span onclick="showPopup('stories')">🎬 stories</span>
+<span>🏸 Badminton</span>
+<span>🎧 Music</span>
+<span>🌙 Night thinker</span>
+<span>🎬 Stories</span>
 </div>
 
 <p id="nowPlaying"></p>
 
 <div class="music-controls">
-<button id="prev">⏮</button>
-<button id="play">▶</button>
-<button id="next">⏭</button>
+<button id="prev">⏮️</button>
+<button id="play">▶️</button>
+<button id="next">⏭️</button>
+<input type="range" id="vol" min="0" max="1" step="0.01" value="0.5">
 </div>
 
-<div id="progressContainer">
-<div id="progress"></div>
-</div>
+<div id="progressContainer"><div id="progress"></div></div>
+
+<p id="timeMsg"></p>
+<p id="hiddenMsg" style="opacity:0;transition:1s;color:#ff77c8">Not everyone notices… but you did.</p>
 
 <a href="https://instagram.com/guruprasath2244">📸 Instagram</a>
-<a href="https://wa.me/919344564778">💬 WhatsApp</a>
+<a id="waLink">💬 WhatsApp</a>
 
 </div>
-
-<div id="popup" class="popup"></div>
 
 <audio id="audio"></audio>
 
 <script>
 
-/* NAME TYPE */
-let name="Guruprasath",i=0;
-(function type(){
-if(i<name.length){
-document.getElementById("name").innerHTML+=name[i++];
-setTimeout(type,100);
-}})();
+/* ===== NAME ===== */
+let n="Guruprasath",i=0;
+(function t(){if(i<n.length){name.innerHTML+=n[i++];setTimeout(t,100)}})();
 
-/* TIME BIO */
-const hour=new Date().getHours();
-const bio=document.getElementById("bio");
+/* ===== INTRO ===== */
+let txt="Not always loud. But always real.",j=0;
+setTimeout(()=>{(function t(){if(j<txt.length){intro.innerHTML+=txt[j++];setTimeout(t,40)}})()},1000);
 
-if(hour<12) bio.innerText="Starting slow…";
-else if(hour<18) bio.innerText="In the middle of something.";
-else if(hour<22) bio.innerText="Evenings feel different.";
-else bio.innerText="Late nights. Real thoughts.";
+/* ===== TIME MSG ===== */
+let h=new Date().getHours();
+timeMsg.innerText=h<12?"Starting slow…":h<18?"In the middle of something.":"Late nights hit different";
 
-/* PARTICLES */
-const c=document.getElementById("bg"),ctx=c.getContext("2d");
-c.width=innerWidth;c.height=innerHeight;
-let p=[];
-for(let i=0;i<60;i++){
-p.push({x:Math.random()*c.width,y:Math.random()*c.height,s:Math.random()*2});
-}
-function anim(){
-ctx.clearRect(0,0,c.width,c.height);
-p.forEach(e=>{
-e.y+=0.4;
-if(e.y>c.height)e.y=0;
-ctx.beginPath();
-ctx.arc(e.x,e.y,e.s,0,Math.PI*2);
-ctx.fillStyle="white";
-ctx.fill();
-});
+/* ===== HIDDEN ===== */
+setTimeout(()=>hiddenMsg.style.opacity=1,5000);
+
+/* ===== PARTICLES ===== */
+let c=bg.getContext("2d");
+bg.width=innerWidth;bg.height=innerHeight;
+let pts=[...Array(60)].map(()=>({x:Math.random()*bg.width,y:Math.random()*bg.height}));
+(function anim(){
+c.clearRect(0,0,bg.width,bg.height);
+pts.forEach(p=>{p.y+=0.5;if(p.y>bg.height)p.y=0;c.fillRect(p.x,p.y,2,2)});
 requestAnimationFrame(anim);
-}
-anim();
+})();
 
-/* MUSIC */
-const songs=[
-{name:"Apocalypse",file:"Apocalypse(MP3_320K).mp3"},
-{name:"Starlight",file:"Starlight(MP3_320K).mp3"},
-{name:"Night Changes",file:"Night Changes(MP3_320K).mp3"},
-{name:"Until I Found You",file:"Until I Found You (Em Beihold Version)(MP3_320K).mp3"},
-{name:"Stranger Flame",file:"Stranger's flame re edit.mp3"},
-{name:"Love is a Laserquest",file:"Love is a Laserquest(MP3_320K).mp3"},
-{name:"To Build a Home",file:"To Build A Home(MP3_320K).mp3"},
-{name:"Someone You Loved",file:"Someone You Loved(MP3_320K).mp3"},
-{name:"Motion Picture Soundtrack",file:"Motion Picture Soundtrack(MP3_320K).mp3"},
-{name:"Intro",file:"Intro(MP3_320K).mp3"}
-];
-
-const audio=document.getElementById("audio");
-const nowPlaying=document.getElementById("nowPlaying");
-
-let current=Math.floor(Math.random()*songs.length);
-let started=false;
-
-function playSong(i){
-audio.src=songs[i].file;
-nowPlaying.innerText="🎧 "+songs[i].name;
-audio.volume=0.6;
-audio.play().catch(()=>{});
-}
-
-/* CONTROLS */
-const playBtn=document.getElementById("play");
-
-playBtn.onclick=()=>{
-if(audio.paused){
-audio.play();
-playBtn.innerText="⏸";
-}else{
-audio.pause();
-playBtn.innerText="▶";
-}
-};
-
-document.getElementById("next").onclick=()=>{
-current=(current+1)%songs.length;
-playSong(current);
-};
-
-document.getElementById("prev").onclick=()=>{
-current=(current-1+songs.length)%songs.length;
-playSong(current);
-};
-
-audio.onended=()=>{
-current=(current+1)%songs.length;
-playSong(current);
-};
-
-audio.ontimeupdate=()=>{
-if(audio.duration){
-document.getElementById("progress").style.width=
-(audio.currentTime/audio.duration)*100+"%";
-}
-};
-
-/* FIRST TAP + RIPPLE */
+/* ===== RIPPLE ===== */
 document.addEventListener("click",e=>{
-const r=document.createElement("div");
+let r=document.createElement("div");
 r.className="ripple";
 r.style.left=e.clientX+"px";
 r.style.top=e.clientY+"px";
 r.style.width=r.style.height="20px";
 document.body.appendChild(r);
 setTimeout(()=>r.remove(),600);
-
-if(!started){
-playSong(current);
-started=true;
-}
 });
 
-/* SECRET */
+/* ===== SECRET TAP ===== */
 let taps=0;
-document.getElementById("profile").onclick=(e)=>{
-e.stopPropagation();
+secretTrigger.onclick=()=>{
 taps++;
-if(taps===5){
-window.location.href="secret.html";
-}
+if(taps===5) location.href="secret.html";
 };
 
-/* POPUP */
-const popup=document.getElementById("popup");
+/* ===== MUSIC ===== */
+const songs=[
+"Apocalypse(MP3_320K).mp3",
+"Starlight(MP3_320K).mp3",
+"Night Changes(MP3_320K).mp3"
+];
 
-function showPopup(type){
-const data={
-badminton:"It’s the only place my mind goes quiet.",
-music:"Some songs understand me better.",
-thoughts:"There’s more than what I show.",
-stories:"Not now but,One day, I’ll tell everything."
+let cur=0;
+const audio=document.getElementById("audio");
+
+function playSong(i){
+audio.src=songs[i];
+audio.volume=vol.value;
+audio.play();
+nowPlaying.innerText="🎧 "+songs[i];
+play.innerText="⏸️";
+}
+
+play.onclick=()=>{
+if(audio.paused){audio.play();play.innerText="⏸️";}
+else{audio.pause();play.innerText="▶️";}
 };
 
-popup.innerText=data[type];
-popup.classList.add("show");
+next.onclick=()=>{cur=(cur+1)%songs.length;playSong(cur);}
+prev.onclick=()=>{cur=(cur-1+songs.length)%songs.length;playSong(cur);}
 
-setTimeout(()=>{
-popup.classList.remove("show");
-},2000);
+vol.oninput=()=>audio.volume=vol.value;
 
-if(type==="music"){
-current=(current+1)%songs.length;
-playSong(current);
+audio.ontimeupdate=()=>{
+progress.style.width=(audio.currentTime/audio.duration)*100+"%";
+};
+
+progressContainer.onclick=e=>{
+let rect=progressContainer.getBoundingClientRect();
+audio.currentTime=((e.clientX-rect.left)/rect.width)*audio.duration;
+};
+
+audio.onended=()=>next.onclick();
+
+/* autoplay first click */
+let started=false;
+document.addEventListener("click",()=>{
+if(!started){playSong(cur);started=true;}
+},{once:true});
+
+/* ===== SMART WHATSAPP ===== */
+const params=new URLSearchParams(location.search);
+let mode=params.get("mode");
+
+let msg;
+
+if(mode==="nfc"){
+msg=h<18?
+"Just tapped your card… that was clean 😄":
+"Tapped your card at night… feels different 🌙";
+}else{
+msg="Hey, came across your page 👀";
 }
-}
+
+waLink.href="https://wa.me/919344564778?text="+encodeURIComponent(msg);
 
 </script>
 
